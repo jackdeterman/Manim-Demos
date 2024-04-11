@@ -52,6 +52,8 @@ class VORDemo(ThreeDScene):
         self.add(legend)
         #End of legend code (In case it's trash and needs to be disposed of)
 
+
+        #Added lines to display the inner and outer radii length before and after the aor shifts
         inner_radius_line = DashedLine(AOR.get_center(), axes.c2p(x, innerfunc(x), 0), color=PURE_RED)
         outer_radius_line = DashedLine(AOR.get_center(), axes.c2p(x, outerfunc(x), 0), color=PURE_BLUE)
         inner_radius_label = Tex("Inner Radius", font_size=24, color=BLACK).next_to(inner_radius_line, DOWN, buff=0.1)
@@ -63,19 +65,20 @@ class VORDemo(ThreeDScene):
         self.play(Create(outer_radius_line), Write(outer_radius_label))
         self.wait(2)
         self.play(FadeOut(outer_radius_line), FadeOut(outer_radius_label))
+        #End of inner/outer radius code
 
         # first revolution: no trace
         self.next_section(skip_animations=skip)
         graphgrp = VGroup(outer,inner,segment)
-        self.play(Rotating(graphgrp, axis=RIGHT, about_point=axes.c2p(0,0,0), angle=2*PI), run_time=3)
-        self.wait(1)
+        self.play(Rotating(graphgrp, axis=RIGHT, about_point=axes.c2p(0,0,0), angle=2*PI), run_time=5)
+        self.wait(2)
 
         # second revolution: show washer
         self.next_section(skip_animations=skip)
         outerpath = TracedPath(segment.get_end, stroke_color=ManimColor('#000000'))
         innerpath = TracedPath(segment.get_start, stroke_color=ManimColor('#000000'))
         self.add(outerpath, innerpath)
-        self.play(Rotating(graphgrp, axis=RIGHT, about_point=axes.c2p(0,0,0), angle=2*PI), run_time=3)
+        self.play(Rotating(graphgrp, axis=RIGHT, about_point=axes.c2p(0,0,0), angle=2*PI), run_time=5)
         self.play(FadeOut(outerpath,innerpath))
 
         #########################################################
@@ -103,7 +106,7 @@ class VORDemo(ThreeDScene):
         # End helper functions
 
         self.next_section(skip_animations=skip)
-        xMovement(0,2)
+        xMovement(0,4)
 
         ################################################
         # helper functions to return and draw surfaces #
@@ -130,7 +133,8 @@ class VORDemo(ThreeDScene):
             self.begin_ambient_camera_rotation(PI/4)
             self.wait(2)
             self.stop_ambient_camera_rotation()
-            self.play(Rotating(graphgrp, axis=RIGHT, about_point=axes.c2p(0,aor,0), angle=2*PI), run_time=3)
+            #Added animation to show the function rotating around the surface once it is displayed
+            self.play(Rotating(graphgrp, axis=RIGHT, about_point=axes.c2p(0,aor,0), angle=2*PI), run_time=5)
             self.play(FadeOut(innersurf,outersurf))
 
         # End surface helper functions
@@ -144,6 +148,10 @@ class VORDemo(ThreeDScene):
         newAOR = DashedLine(axes.c2p(-1,-1,0),axes.c2p(2,-1,0), color=DARK_BROWN)
         self.play(ReplacementTransform(AOR,newAOR))
 
+        #Can replace this code with a pause in the animation
+        self.wait(3)
+
+        #Added inner / outer radii lines
         new_inner_radius_line = DashedLine(AOR.get_center(), axes.c2p(x, innerfunc(x), 0), color=PURE_RED)
         new_outer_radius_line = DashedLine(AOR.get_center(), axes.c2p(x, outerfunc(x), 0), color=PURE_BLUE)
 
@@ -153,18 +161,19 @@ class VORDemo(ThreeDScene):
         self.play(Create(new_outer_radius_line), Write(outer_radius_label))
         self.wait(2)
         self.play(FadeOut(new_outer_radius_line), FadeOut(outer_radius_label))
+        #End of second set of radii code
 
         # third revolution: show larger washer
         newouterpath = TracedPath(segment.get_end, stroke_color=ManimColor('#000000'))
         newinnerpath = TracedPath(segment.get_start, stroke_color=ManimColor('#000000'))
         self.add(newouterpath, newinnerpath)
         self.next_section(skip_animations=skip)
-        self.play(Rotating(graphgrp, axis=RIGHT, about_point=axes.c2p(0, -1, 0), angle=2*PI), run_time=3)
+        self.play(Rotating(graphgrp, axis=RIGHT, about_point=axes.c2p(0, -1, 0), angle=2*PI), run_time=5)
         self.play(FadeOut(newouterpath,newinnerpath))
 
         # second x movement (with larger washer)
         self.next_section(skip_animations=skip)
-        xMovement(-1,2)
+        xMovement(-1,4)
         self.wait(2)
 
         # second surface viz
